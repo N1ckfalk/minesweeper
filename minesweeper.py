@@ -202,6 +202,20 @@ show_col_bombs()
 
 def update_screen(state):
     pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+    for i in range(cols):
+        pygame.draw.rect(screen, BLACK,(i * side - 1,0 ,2, rows * side))
+    for i in range(rows):
+        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,2))
+    for row in range(rows):
+        for col in range(cols):
+            if click_field[row][col] == "-":
+                image_ = pygame.image.load("flag.jpg") 
+                image_ = pygame.transform.scale(image_, (side - 2, side - 2))
+                x = col * side
+                y = row * side
+                screen.blit(image_,(x,y))
+    image_ = pygame.image.load("flag.jpg") 
+    image_ = pygame.transform.scale(image_, (side - 2, side - 2))
     for row in range(rows):
         for col in range(cols):
             if click_field[row][col] == '/':
