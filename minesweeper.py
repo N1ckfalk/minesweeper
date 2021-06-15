@@ -1,8 +1,16 @@
 import pygame
 import time
 import random 
+from glob import glob 
+
+
+file_name = "results.txt"
+if not glob(file_name):
+    with open(file_name,"w") as f:
+        pass
+
 pygame.font.init()
- 
+
 def create_field(rows,cols):
     matrix = []
     for i in range(rows):
@@ -64,7 +72,7 @@ cols = 20
 rows = 15
 last_state = ''
 flag_klick = 0
-bombs = 15
+bombs = 3
 GRAY = (127, 127,127)
 screen = pygame.display.set_mode((cols * side, rows * side + 50))
 
@@ -226,9 +234,6 @@ screen.blit(stats_img,(10, rows * side + 5))
 
 
 while True:
-    f = open("results.txt", "r")
-    name = f.read()
-    f.close()
     events = pygame.event.get()
     for i in range(len(events)):
         if events[i].type == pygame.QUIT:
