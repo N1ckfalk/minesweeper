@@ -68,11 +68,11 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 WHITE = (255,255,255)
 YELLOW = (255,255,0)
-cols = 15
-rows = 10
+cols = 20
+rows = 15
 last_state = ''
 flag_klick = 0
-bombs = 10
+bombs = 3
 GRAY = (127, 127,127)
 screen = pygame.display.set_mode((cols * side, rows * side + 50))
 
@@ -97,8 +97,6 @@ def start_game():
     return field, click_field, state, last, start,winner
 
 field, click_field, state, last, start, winner = start_game()
-
-
 
 def draw_zero():
     mark = True
@@ -187,14 +185,51 @@ def show_stats():
     for i in range(rows):
         pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
     mesto = 1
-    for name, seconds in results.items():
-        if seconds >= 60:
-            seconds = f"{seconds // 60}m:{seconds % 60}"
-        text = f"{mesto}) {name} --- {seconds}c"
-        rendered_text = font.render(text, True, BLACK)
-        screen.blit(rendered_text, (20,mesto * side)) 
-        mesto += 1   
+    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+    pygame.draw.rect(screen, BLACK,(side + 450,0 ,1, rows * side - 30))
 
+    text = "Легкий"
+    rendered_text = font.render(text, True, BLACK)
+    screen.blit(rendered_text, (60,14 * side)) 
+    pygame.draw.rect(screen, BLACK,(side + 170,420 ,1, side))
+
+    text = "Средний"
+    rendered_text = font.render(text, True, BLACK)
+    screen.blit(rendered_text, (262,14 * side)) 
+    pygame.draw.rect(screen, BLACK,(side + 370,420 ,1, side))
+
+    text = "Сложный"
+    rendered_text = font.render(text, True, BLACK)
+    screen.blit(rendered_text, (465,14 * side)) 
+
+    text = "№"
+    rendered_text = font.render(text, True, BLACK)
+    screen.blit(rendered_text, (13,5)) 
+
+    text = "Имя"
+    rendered_text = font.render(text, True, BLACK)
+    screen.blit(rendered_text, (250,5)) 
+
+    text = "Время"
+    rendered_text = font.render(text, True, BLACK)
+    screen.blit(rendered_text, (510,5)) 
+
+    for name, seconds in results.items():
+        text = f"{mesto}"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+        text = f"{name}"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (250,mesto * side)) 
+
+
+        text = f"{seconds // 60}m {seconds % 60}c"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (510,mesto * side)) 
+        mesto += 1   
+    
 def show_col_bombs():
     pygame.draw.rect(screen, BLACK,(cols * side - 50, rows * side + 30, 100, 100))
     show_bomb = str(bombs - flag_klick)
@@ -257,7 +292,6 @@ while True:
             exit()
         if events[i].type == pygame.MOUSEBUTTONDOWN and events[i].button == 1:
             x, y = events[i].pos
-
             restart_left = cols * side // 2 + 85
             restart_up = rows * side + 5
             if restart_left <= x <= restart_left + (side - 2) and restart_up <= y <= restart_up +(side - 2):
@@ -350,7 +384,7 @@ while True:
             m.write(f"{name} --> {p}\n")
         m.close()
         
-    if state == 'game on' and time.time() - last >= 1:
+    if state == 'game on' and time.time() - last >= 1 or state == 'stats' and time.time() - last >= 1:
         pygame.draw.rect(screen, BLACK,(cols * side - 50,rows * side + 5, 50, 20))
         show_time = str(int(time.time() - start))
         x = font.render(show_time,True,WHITE)
