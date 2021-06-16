@@ -68,11 +68,11 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 WHITE = (255,255,255)
 YELLOW = (255,255,0)
-cols = 20
-rows = 15
+cols = 15
+rows = 10
 last_state = ''
 flag_klick = 0
-bombs = 3
+bombs = 10
 GRAY = (127, 127,127)
 screen = pygame.display.set_mode((cols * side, rows * side + 50))
 
@@ -97,6 +97,7 @@ def start_game():
     return field, click_field, state, last, start,winner
 
 field, click_field, state, last, start, winner = start_game()
+
 
 
 def draw_zero():
@@ -187,7 +188,9 @@ def show_stats():
         pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
     mesto = 1
     for name, seconds in results.items():
-        text = f"{mesto}) {name} --- {seconds} c"
+        if seconds >= 60:
+            seconds = f"{seconds // 60}m:{seconds % 60}"
+        text = f"{mesto}) {name} --- {seconds}c"
         rendered_text = font.render(text, True, BLACK)
         screen.blit(rendered_text, (20,mesto * side)) 
         mesto += 1   
