@@ -75,7 +75,7 @@ flag_klick = 0
 bombs = 3
 GRAY = (127, 127,127)
 screen = pygame.display.set_mode((cols * side, rows * side + 50))
-
+time_on = False
 
 
 def start_game():
@@ -101,6 +101,7 @@ def start_game():
     stats_img = pygame.image.load("stats.jpg") 
     stats_img = pygame.transform.scale(stats_img, (side - 2, side - 2))
     screen.blit(stats_img,(10, rows * side + 5))
+    show_col_bombs()
     return field, click_field, state, last, start,winner
 
 # field, click_field, state, last, start, winner = start_game()
@@ -268,11 +269,11 @@ def show_stats():
         mesto += 1   
     
 def show_col_bombs():
-    pygame.draw.rect(screen, BLACK,(cols * side - 50, rows * side + 30, 100, 100))
+    pygame.draw.rect(screen, BLACK,(cols * side - 35, rows * side + 30, 100, 100))
     show_bomb = str(bombs - flag_klick)
     x = font.render(show_bomb,True,WHITE)
     screen.blit(x, (cols * side - 30, rows * side + 30))
-show_col_bombs()
+
 
 
 def update_screen(state):
@@ -323,16 +324,13 @@ while True:
             exit()
         if events[i].type == pygame.MOUSEBUTTONDOWN and events[i].button == 1:
             x, y = events[i].pos
-
             
-
-
-
-
             restart_left = cols * side // 2 + 85
             restart_up = rows * side + 5
             if restart_left <= x <= restart_left + (side - 2) and restart_up <= y <= restart_up +(side - 2):
                 field, click_field, state, last, start, winner = start_game()
+                time_on = False
+                pygame.draw.rect(screen, BLACK,(cols * side - 35, rows * side + 5, 50, 20)) # замазываем таймер
 
             stats_left = 10
             stats_up = rows * side + 5
@@ -348,6 +346,9 @@ while True:
             if events[i].type == pygame.MOUSEBUTTONDOWN:
                 x, y = events[i].pos
                 if y < rows * side:
+                    if not time_on:
+                        time_on = True
+                        start = time.time()
                     x -= x % side
                     y -= y % side
                     if events[i].button == 1 and click_field[y // side][x // side] == 0:
@@ -455,10 +456,10 @@ while True:
             m.write(f"{player_name} --> {p}\n")
         m.close()
         
-    if state == 'game on' and time.time() - last >= 1 or state == 'stats' and time.time() - last >= 1:
-        pygame.draw.rect(screen, BLACK,(cols * side - 50,rows * side + 5, 50, 20))
+    if (state == 'game on' or state == 'stats' and last_state == "game on") and time.time() - last >= 0.1 and time_on:
+        pygame.draw.rect(screen, BLACK,(cols * side - 35, rows * side + 5, 50, 20))
         show_time = str(int(time.time() - start))
         x = font.render(show_time,True,WHITE)
         last = time.time()  
-        screen.blit(x, (cols * side - 40, rows * side + 5))
+        screen.blit(x, (cols * side - 30, rows * side + 5))
     pygame.display.update()
