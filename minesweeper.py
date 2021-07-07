@@ -72,7 +72,7 @@ cols = 20
 rows = 15
 last_state = ''
 flag_klick = 0
-bombs = 3
+bombs = 30
 GRAY = (127, 127,127)
 screen = pygame.display.set_mode((cols * side, rows * side + 50))
 
