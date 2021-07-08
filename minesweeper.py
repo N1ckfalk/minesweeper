@@ -136,6 +136,53 @@ def difficult_menu():
 
 difficult_menu()
 
+def click(click_col, click_row):
+    global winner
+    state = "game on"
+    if 0 <= click_col < cols and 0 <= click_row < rows and click_field[click_row][click_col] == 0:
+        if field[click_row][click_col] == '*':
+            state = 'game off'
+            font2 = pygame.font.SysFont('Times New Roman', 28) 
+            print_lose = font2.render('YOU LOSE!',True,YELLOW)
+            screen.blit(print_lose, (cols * side // 2 - 75, rows * side + 5))
+            image = pygame.image.load("simvol_saper.png") 
+            image = pygame.transform.scale(image, (side, side))
+            for row in range(rows):
+                for col in range(cols):
+                    if field[row][col] == '*':
+                        x = col * side
+                        y = row * side
+                        screen.blit(image,(x,y))
+        elif field[click_row][click_col] == 0 :  
+            click_field[click_row][click_col] = '/'
+            winner -= 1
+            draw_zero()                                              
+            pygame.draw.rect(screen, GRAY,(side * click_col,side * click_row, side, side))
+        else:
+            text_simvol = font.render(str(field[click_row][click_col]), False, BLACK)
+            screen.blit(text_simvol, (side * click_col + int(0.4 * side), side * click_row))
+            click_field[click_row][click_col] = '/'
+            winner -= 1
+    return state
+
+
+def multi_click(click_col, click_row):
+    global state
+    click_coords = [
+        (click_col - 1, click_row - 1), 
+        (click_col + 1, click_row + 1), 
+        (click_col - 1, click_row + 1), 
+        (click_col + 1, click_row - 1), 
+        (click_col + 1, click_row), 
+        (click_col, click_row + 1), 
+        (click_col - 1, click_row), 
+        (click_col, click_row - 1)
+    ]
+    for click_col, click_row in click_coords:
+        state = click(click_col,click_row)
+        if state == "game off":
+            break
+
 def draw_zero():
     mark = True
     global winner
@@ -316,7 +363,7 @@ def update_screen(state):
 
 
 
-
+events_met = False
 while True:
     events = pygame.event.get()
     for i in range(len(events)):
@@ -324,10 +371,10 @@ while True:
             exit()
         if events[i].type == pygame.MOUSEBUTTONDOWN and events[i].button == 1:
             x, y = events[i].pos
-            
             restart_left = cols * side // 2 + 85
             restart_up = rows * side + 5
             if restart_left <= x <= restart_left + (side - 2) and restart_up <= y <= restart_up +(side - 2):
+                flag_klick = 0
                 field, click_field, state, last, start, winner = start_game()
                 time_on = False
                 pygame.draw.rect(screen, BLACK,(cols * side - 35, rows * side + 5, 50, 20)) # замазываем таймер
@@ -351,7 +398,82 @@ while True:
                         start = time.time()
                     x -= x % side
                     y -= y % side
-                    if events[i].button == 1 and click_field[y // side][x // side] == 0:
+                    if events[i].button == 1:
+                        time.sleep(0.1)
+                        events2 = pygame.event.get() + events
+                        for j in range(len(events2)):
+                            if events2[j].type == pygame.MOUSEBUTTONDOWN and events2[j].button == 3:
+                                events_met = True
+                    if events[i].button == 3:
+                        time.sleep(0.1)
+                        events2 = pygame.event.get()
+                        for j in range(len(events2)):
+                            if  events2[j].type == pygame.MOUSEBUTTONDOWN and events2[j].button == 1:
+                                events_met = True
+                    if events_met or events[i].button == 2:
+                        if click_field[y // side][x // side] == '/':
+                            kol_bombs = field[y // side][x // side]
+                            print(kol_bombs)
+                            if kol_bombs != 0 and kol_bombs != 8:
+                                kol_flags = 0
+
+                                kolonka = x // side - 1
+                                strochka= y // side - 1
+                                if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                    kol_flags += 1
+
+                                    kolonka = x // side + 1
+                                    strochka= y // side + 1
+                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                        kol_flags += 1
+
+                                    kolonka = x // side + 1
+                                    strochka= y // side - 1
+                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                        kol_flags += 1
+
+                                    kolonka = x // side - 1
+                                    strochka= y // side + 1
+                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                        kol_flags += 1
+
+                                    kolonka = x // side
+                                    strochka= y // side - 1
+                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                        kol_flags += 1
+
+                                    kolonka = x // side - 1
+                                    strochka= y // side
+                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                        kol_flags += 1
+
+                                    kolonka = x // side + 1
+                                    strochka= y // side
+                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                        kol_flags += 1
+
+                                    kolonka = x // side + 1
+                                    strochka= y // side
+                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                        kol_flags += 1
+                                                                
+
+
+                                # int(click_field[y // side - 1][x // side - 1] == '-') +
+                                #     int(click_field[y // side + 1][x // side + 1] == '-') +
+                                #     int(click_field[y // side - 1][x // side + 1] == '-') +
+                                #     int(click_field[y // side + 1][x // side - 1] == '-') +
+                                #     int(click_field[y // side + 1][x // side] == '-') +
+                                #     int(click_field[y // side][x // side + 1] == '-') +
+                                #     int(click_field[y // side - 1][x // side] == '-') +
+                                #     int(click_field[y // side][x // side - 1] == '-')                                            
+                                # # )
+                                if kol_bombs == kol_flags:
+                                    multi_click(x // side, y // side)
+                        events_met = False
+
+                        #  click_field[y // side][x // side] = '-'
+                    elif events[i].button == 1 and click_field[y // side][x // side] == 0:
                         if field[y // side][x // side] == '*':
                             state = 'game off'
                             font2 = pygame.font.SysFont('Times New Roman', 28) 
@@ -394,7 +516,8 @@ while True:
                 x, y = events[i].pos
 
                 if 100 <= x <= 200 and 300 <= y <= 400:
-                    print("eazy")
+                    print("easy")
+                    complexity = "easy"
                     bombs = 10
                     rows = 15
                     cols = 10
@@ -402,6 +525,7 @@ while True:
                     field, click_field, state, last, start, winner = start_game()
                 if 240 <= x <= 340 and 300 <= y <= 400:
                     print("normal")
+                    complexity = "normal"
                     bombs = 40
                     rows = 20
                     cols = 15
@@ -409,6 +533,7 @@ while True:
                     field, click_field, state, last, start, winner = start_game()
                 if 380 <= x <= 480 and 300 <= y <= 400:
                     print("hard")
+                    complexity = "hard"
                     bombs = 130
                     rows = 25
                     cols = 35
