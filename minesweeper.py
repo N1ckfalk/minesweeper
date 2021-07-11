@@ -528,9 +528,25 @@ while True:
                     last_state = state
                     show_stats()
                     state = "stats"
+                    if complexity == "easy":
+                        pygame.draw.rect(screen, RED,(0,420 ,90,30))
+                        text = "Легкий"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (20,14 * side)) 
+                    if complexity == "normal":
+                        pygame.draw.rect(screen, RED,(130,570,170,30))
+                        text = "Средний"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (180,19 * side)) 
+                    if complexity == 'hard':
+                        pygame.draw.rect(screen, RED,(680,570,380,30))
+                        text = "Сложный"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (825,19 * side)) 
                 else:
                     state = last_state
                     update_screen(state)
+      
         if state == "stats":
             if events[i].type == pygame.MOUSEBUTTONDOWN and events[i].button == 1:
                 x_menu, y_menu = events[i].pos
@@ -549,6 +565,8 @@ while True:
                     pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
                     pygame.draw.rect(screen, BLACK,(side + 170,0 ,1, rows * side - 10))
 
+
+                    pygame.draw.rect(screen, RED,(0,420 ,90,30))
                     text = "Легкий"
                     rendered_text = font.render(text, True, BLACK)
                     screen.blit(rendered_text, (20,14 * side)) 
@@ -617,6 +635,7 @@ while True:
                     screen.blit(rendered_text, (20,14 * side)) 
                     pygame.draw.rect(screen, BLACK,(side + 170,420 ,1, side))
 
+                    pygame.draw.rect(screen, RED,(90,420 ,110,30))
                     text = "Средний"
                     rendered_text = font.render(text, True, BLACK)
                     screen.blit(rendered_text, (110,14 * side)) 
@@ -681,6 +700,7 @@ while True:
                     screen.blit(rendered_text, (110,14 * side)) 
                     pygame.draw.rect(screen, BLACK,(side + 60,420 ,1, side))
 
+                    pygame.draw.rect(screen, RED,(200,420 ,110,30))
                     text = "Сложный"
                     rendered_text = font.render(text, True, BLACK)
                     screen.blit(rendered_text, (215,14 * side)) 
@@ -732,6 +752,7 @@ while True:
                     pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
                     pygame.draw.rect(screen, BLACK,(side + 300,0 ,1, rows * side - 30))
 
+                    pygame.draw.rect(screen, RED,(0,570,130,30))
                     text = "Легкий"
                     rendered_text = font.render(text, True, BLACK)
                     screen.blit(rendered_text, (40,19 * side)) 
@@ -776,7 +797,6 @@ while True:
                         mesto += 1   
 
 
-
                 if 131 <= x_menu <= 300 and 570 <= y <= 600 and complexity == "normal":
                     print("NORMAL")
                     results_normal_normal = {}
@@ -797,7 +817,7 @@ while True:
                     screen.blit(rendered_text, (40,19 * side)) 
                     pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
                     
-
+                    pygame.draw.rect(screen, RED,(130,570,170,30))
                     text = "Средний"
                     rendered_text = font.render(text, True, BLACK)
                     screen.blit(rendered_text, (180,19 * side)) 
@@ -864,6 +884,7 @@ while True:
                     screen.blit(rendered_text, (180,19 * side)) 
                     pygame.draw.rect(screen, BLACK,(side + 100,570 ,1, side))
 
+                    pygame.draw.rect(screen, RED,(300,570,150,30))
                     text = "Сложный"
                     rendered_text = font.render(text, True, BLACK)
                     screen.blit(rendered_text, (335,19 * side)) 
@@ -915,6 +936,7 @@ while True:
                     pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
                     pygame.draw.rect(screen, BLACK,(side + 800,0 ,1, rows * side - 30))
 
+                    pygame.draw.rect(screen, RED,(0,570,300,30))
                     text = "Легкий"
                     rendered_text = font.render(text, True, BLACK)
                     screen.blit(rendered_text, (100,19 * side)) 
@@ -985,6 +1007,7 @@ while True:
                     pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
 
                     text = "Средний"
+                    pygame.draw.rect(screen, RED,(300,570,380,30))
                     rendered_text = font.render(text, True, BLACK)
                     screen.blit(rendered_text, (450,19 * side)) 
                     pygame.draw.rect(screen, BLACK,(side + 650,570 ,1, side))
@@ -1051,6 +1074,7 @@ while True:
                     screen.blit(rendered_text, (450,19 * side)) 
                     pygame.draw.rect(screen, BLACK,(side + 650,570 ,1, side))
 
+                    pygame.draw.rect(screen, RED,(680,570,380,30))
                     text = "Сложный"
                     rendered_text = font.render(text, True, BLACK)
                     screen.blit(rendered_text, (825,19 * side)) 
@@ -1084,8 +1108,6 @@ while True:
                         mesto += 1
 
 
-            
-        
         if state == 'game on':
             if events[i].type == pygame.MOUSEBUTTONDOWN:
                 x, y = events[i].pos
