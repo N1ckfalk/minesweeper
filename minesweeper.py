@@ -3,11 +3,20 @@ import time
 import random 
 from glob import glob 
 
+# file_name = "results_eazy.txt"
+# if not glob(file_name):
+#     with open(file_name,"w") as f:
+#         pass
 
-file_name = "results.txt"
-if not glob(file_name):
-    with open(file_name,"w") as f:
-        pass
+# file_name = "results_normal.txt"
+# if not glob(file_name):
+#     with open(file_name,"w") as f:
+#         pass
+
+# file_name = "results_hard.txt"
+# if not glob(file_name):
+#     with open(file_name,"w") as f:
+#         pass
 
 pygame.font.init()
 
@@ -18,13 +27,31 @@ def create_field(rows,cols):
     return matrix
 
 def read_results():
-    with open("results.txt", "r", encoding= "UTF-8") as f:
-        strings = f.readlines()
     info = {}
-    for string in strings:
-        k,v = string.strip().split(" --> ")
-        info[k] = int(v)
-    return info
+    if complexity == "easy":
+        with open("results_easy.txt", "r", encoding= "UTF-8") as f:
+            strings = f.readlines()
+            for string in strings:
+                k,v = string.strip().split(" --> ")
+                info[k] = int(v)
+            return info
+            
+    elif complexity == "normal":
+        with open("results_normal.txt", "r", encoding= "UTF-8") as f:
+            strings = f.readlines()
+            for string in strings:
+                k,v = string.strip().split(" --> ")
+                info[k] = int(v)
+            return info
+    elif complexity == "hard":
+        with open("results_hard.txt", "r", encoding= "UTF-8") as f:
+            strings = f.readlines()
+            for string in strings:
+                k,v = string.strip().split(" --> ")
+                info[k] = int(v)
+            return info
+    
+    
 
 
 
@@ -98,6 +125,11 @@ def start_game():
     restart_img = pygame.transform.scale(restart_img, (side - 2, side - 2))
     screen.blit(restart_img,(cols * side // 2 + 85, rows * side + 5))
 
+    menu_img = pygame.image.load("menu.jpg") 
+    menu_img = pygame.transform.scale(menu_img, (side - 2, side - 2))
+    screen.blit(menu_img,(cols * side // 2 - 110, rows * side + 5))
+
+
     stats_img = pygame.image.load("stats.jpg") 
     stats_img = pygame.transform.scale(stats_img, (side - 2, side - 2))
     screen.blit(stats_img,(10, rows * side + 5))
@@ -131,7 +163,7 @@ def difficult_menu():
     p = 380
     pygame.draw.rect(screen, WHITE, (p, j, 100,100))
     screen.blit(font2.render("  Сложный",True,BLACK), (p, j))
-    screen.blit(font2.render("  35x25",True,BLACK), (p, j + 30))
+    screen.blit(font2.render("  35x20",True,BLACK), (p, j + 30))
     screen.blit(font2.render("  130 бомб",True,BLACK), (p, j + 60))
 
 difficult_menu()
@@ -270,51 +302,147 @@ def show_stats():
     for i in range(rows):
         pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
     mesto = 1
-    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
-    pygame.draw.rect(screen, BLACK,(side + 450,0 ,1, rows * side - 30))
+    if complexity == "easy":
+        pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+        pygame.draw.rect(screen, BLACK,(side + 170,0 ,1, rows * side - 10))
 
-    text = "Легкий"
-    rendered_text = font.render(text, True, BLACK)
-    screen.blit(rendered_text, (60,14 * side)) 
-    pygame.draw.rect(screen, BLACK,(side + 170,420 ,1, side))
-
-    text = "Средний"
-    rendered_text = font.render(text, True, BLACK)
-    screen.blit(rendered_text, (262,14 * side)) 
-    pygame.draw.rect(screen, BLACK,(side + 370,420 ,1, side))
-
-    text = "Сложный"
-    rendered_text = font.render(text, True, BLACK)
-    screen.blit(rendered_text, (465,14 * side)) 
-
-    text = "№"
-    rendered_text = font.render(text, True, BLACK)
-    screen.blit(rendered_text, (13,5)) 
-
-    text = "Имя"
-    rendered_text = font.render(text, True, BLACK)
-    screen.blit(rendered_text, (250,5)) 
-
-    text = "Время"
-    rendered_text = font.render(text, True, BLACK)
-    screen.blit(rendered_text, (510,5)) 
-
-    for name, seconds in results.items():
-        text = f"{mesto}"
+        text = "Легкий"
         rendered_text = font.render(text, True, BLACK)
-        screen.blit(rendered_text, (15,mesto * side)) 
+        screen.blit(rendered_text, (20,14 * side)) 
+        pygame.draw.rect(screen, BLACK,(side + 170,420 ,1, side))
 
-
-        text = f"{name}"
+        text = "Средний"
         rendered_text = font.render(text, True, BLACK)
-        screen.blit(rendered_text, (250,mesto * side)) 
+        screen.blit(rendered_text, (110,14 * side)) 
+        pygame.draw.rect(screen, BLACK,(side + 60,420 ,1, side))
 
-
-        text = f"{seconds // 60}m {seconds % 60}c"
+        text = "Сложный"
         rendered_text = font.render(text, True, BLACK)
-        screen.blit(rendered_text, (510,mesto * side)) 
-        mesto += 1   
+        screen.blit(rendered_text, (215,14 * side)) 
+
+        text = "№"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (13,5)) 
+
+        text = "Имя"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (100,5)) 
+
+        text = "Время"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (230,5)) 
+
+        for name, seconds in results.items():
+            text = f"{mesto}"
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (15,mesto * side)) 
+
+
+            text = f"{name}"
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (100,mesto * side)) 
+
+
+            text = f"{seconds // 60}m {seconds % 60}c"
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (230,mesto * side)) 
+            mesto += 1   
+
+
+    if complexity == "normal":
+        pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+        pygame.draw.rect(screen, BLACK,(side + 300,0 ,1, rows * side - 30))
+
+        text = "Легкий"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (40,19 * side)) 
+        pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
+        
+
+        text = "Средний"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (180,19 * side)) 
+        pygame.draw.rect(screen, BLACK,(side + 100,570 ,1, side))
+
+        text = "Сложный"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (335,19 * side)) 
+
+        text = "№"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (13,5)) 
+
+        text = "Имя"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (160,5)) 
+
+        text = "Время"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (370,5)) 
+
+        for name, seconds in results.items():
+            text = f"{mesto}"
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (15,mesto * side)) 
+
+
+            text = f"{name}"
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (160,mesto * side)) 
+
+
+            text = f"{seconds // 60}m {seconds % 60}c"
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (370,mesto * side)) 
+            mesto += 1   
+
+
     
+    if complexity == "hard":
+        pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+        pygame.draw.rect(screen, BLACK,(side + 800,0 ,1, rows * side - 30))
+
+        text = "Легкий"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (100,19 * side)) 
+        pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
+
+        text = "Средний"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (450,19 * side)) 
+        pygame.draw.rect(screen, BLACK,(side + 650,570 ,1, side))
+
+        text = "Сложный"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (825,19 * side)) 
+
+        text = "№"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (13,5)) 
+
+        text = "Имя"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (400,5)) 
+
+        text = "Время"
+        rendered_text = font.render(text, True, BLACK)
+        screen.blit(rendered_text, (920,5)) 
+
+        for name, seconds in results.items():
+            text = f"{mesto}"
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (15,mesto * side)) 
+
+
+            text = f"{name}"
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (400,mesto * side)) 
+
+
+            text = f"{seconds // 60}m {seconds % 60}c"
+            rendered_text = font.render(text, True, BLACK)
+            screen.blit(rendered_text, (920,mesto * side)) 
+            mesto += 1   
 def show_col_bombs():
     pygame.draw.rect(screen, BLACK,(cols * side - 35, rows * side + 30, 100, 100))
     show_bomb = str(bombs - flag_klick)
@@ -378,6 +506,20 @@ while True:
                 field, click_field, state, last, start, winner = start_game()
                 time_on = False
                 pygame.draw.rect(screen, BLACK,(cols * side - 35, rows * side + 5, 50, 20)) # замазываем таймер
+            
+            menu_left = cols * side // 2 - 110
+            menu_up = rows * side + 5
+            if menu_left <= x <= menu_left + (side - 2) and menu_up <= y <= menu_up + (side - 2):
+                pygame.draw.rect(screen, BLACK ,(0,0 ,cols * side, rows * side + 100))
+                flag_klick = 0
+                state = "menu"
+                cols = 20
+                rows = 15
+                screen = pygame.display.set_mode((cols * side, rows * side + 50))
+                print_name()
+                difficult_menu()
+                time_on = False
+                
 
             stats_left = 10
             stats_up = rows * side + 5
@@ -389,6 +531,561 @@ while True:
                 else:
                     state = last_state
                     update_screen(state)
+        if state == "stats":
+            if events[i].type == pygame.MOUSEBUTTONDOWN and events[i].button == 1:
+                x_menu, y_menu = events[i].pos
+                if 0 <= x_menu <= 90 and 418 <= y <= 448 and complexity == "easy":
+                    print("EASY")
+                    results_easy_easy = {}
+                    with open("results_easy.txt", "r", encoding= "UTF-8") as f:
+                        strings_easy = f.readlines()
+                        for string in strings_easy:
+                            k,v = string.strip().split(" --> ")
+                            results_easy_easy[k] = int(v)
+                    pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+                    for i in range(rows):
+                        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
+                    mesto = 1
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 170,0 ,1, rows * side - 10))
+
+                    text = "Легкий"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (20,14 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 170,420 ,1, side))
+
+                    text = "Средний"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (110,14 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 60,420 ,1, side))
+
+                    text = "Сложный"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (215,14 * side)) 
+
+                    text = "№"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (13,5)) 
+
+                    text = "Имя"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (100,5)) 
+
+                    text = "Время"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (230,5)) 
+
+                    for name, seconds in results_easy_easy.items():
+                        text = f"{mesto}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+                        text = f"{name}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (100,mesto * side)) 
+
+
+                        text = f"{seconds // 60}m {seconds % 60}c"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (230,mesto * side)) 
+                        mesto += 1   
+
+
+
+
+
+
+
+                if 91 <= x_menu <= 200 and 418 <= y <= 448 and complexity == "easy":
+                    print("NORMAL")
+                    results_normal_easy = {}
+                    with open("results_normal.txt", "r", encoding= "UTF-8") as f:
+                        strings_easy = f.readlines()
+                        for string in strings_easy:
+                            k,v = string.strip().split(" --> ")
+                            results_normal_easy[k] = int(v)
+                    pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+                    for i in range(rows):
+                        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
+                    mesto = 1
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 170,0 ,1, rows * side - 10))
+
+                    text = "Легкий"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (20,14 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 170,420 ,1, side))
+
+                    text = "Средний"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (110,14 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 60,420 ,1, side))
+
+                    text = "Сложный"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (215,14 * side)) 
+
+                    text = "№"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (13,5)) 
+
+                    text = "Имя"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (100,5)) 
+
+                    text = "Время"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (230,5)) 
+
+                    for name, seconds in results_normal_easy.items():
+                        text = f"{mesto}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+                        text = f"{name}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (100,mesto * side)) 
+
+
+                        text = f"{seconds // 60}m {seconds % 60}c"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (230,mesto * side)) 
+                        mesto += 1   
+
+   
+
+                if 201 <= x_menu <= 300 and 418 <= y <= 448 and complexity == "easy":
+                    print("HARD")
+                    results_hard_easy = {}
+                    with open("results_hard.txt", "r", encoding= "UTF-8") as f:
+                        strings_easy = f.readlines()
+                        for string in strings_easy:
+                            k,v = string.strip().split(" --> ")
+                            results_hard_easy[k] = int(v)
+                    pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+                    for i in range(rows):
+                        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
+                    mesto = 1
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 170,0 ,1, rows * side - 10))
+
+                    text = "Легкий"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (20,14 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 170,420 ,1, side))
+
+                    text = "Средний"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (110,14 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 60,420 ,1, side))
+
+                    text = "Сложный"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (215,14 * side)) 
+
+                    text = "№"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (13,5)) 
+
+                    text = "Имя"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (100,5)) 
+
+                    text = "Время"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (230,5)) 
+
+                    for name, seconds in results_hard_easy.items():
+                        text = f"{mesto}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+                        text = f"{name}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (100,mesto * side)) 
+
+
+                        text = f"{seconds // 60}m {seconds % 60}c"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (230,mesto * side)) 
+                        mesto += 1   
+                    
+
+
+
+
+                if 0 <= x_menu <= 130 and 570 <= y <= 600 and complexity == "normal":
+                    print("EASY")
+                    results_easy_normal = {}
+                    with open("results_easy.txt", "r", encoding= "UTF-8") as f:
+                        strings_easy = f.readlines()
+                        for string in strings_easy:
+                            k,v = string.strip().split(" --> ")
+                            results_easy_normal[k] = int(v)
+                    pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+                    for i in range(rows):
+                        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
+                    mesto = 1
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 300,0 ,1, rows * side - 30))
+
+                    text = "Легкий"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (40,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
+                    
+
+                    text = "Средний"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (180,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 100,570 ,1, side))
+
+                    text = "Сложный"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (335,19 * side)) 
+
+                    text = "№"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (13,5)) 
+
+                    text = "Имя"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (160,5)) 
+
+                    text = "Время"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (370,5)) 
+
+                    for name, seconds in results_easy_normal.items():
+                        text = f"{mesto}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+                        text = f"{name}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (160,mesto * side)) 
+
+
+                        text = f"{seconds // 60}m {seconds % 60}c"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (370,mesto * side)) 
+                        mesto += 1   
+
+
+
+                if 131 <= x_menu <= 300 and 570 <= y <= 600 and complexity == "normal":
+                    print("NORMAL")
+                    results_normal_normal = {}
+                    with open("results_normal.txt", "r", encoding= "UTF-8") as f:
+                        strings_easy = f.readlines()
+                        for string in strings_easy:
+                            k,v = string.strip().split(" --> ")
+                            results_normal_normal[k] = int(v)
+                    pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+                    for i in range(rows):
+                        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
+                    mesto = 1
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 300,0 ,1, rows * side - 30))
+
+                    text = "Легкий"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (40,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
+                    
+
+                    text = "Средний"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (180,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 100,570 ,1, side))
+
+                    text = "Сложный"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (335,19 * side)) 
+
+                    text = "№"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (13,5)) 
+
+                    text = "Имя"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (160,5)) 
+
+                    text = "Время"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (370,5)) 
+
+                    for name, seconds in results_normal_normal.items():
+                        text = f"{mesto}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+                        text = f"{name}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (160,mesto * side)) 
+
+
+                        text = f"{seconds // 60}m {seconds % 60}c"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (370,mesto * side)) 
+                        mesto += 1   
+
+
+
+
+                if 301 <= x_menu <= 450 and 570 <= y <= 600 and complexity == "normal":
+                    print("HARD")
+                    results_hard_normal = {}
+                    with open("results_hard.txt", "r", encoding= "UTF-8") as f:
+                        strings_easy = f.readlines()
+                        for string in strings_easy:
+                            k,v = string.strip().split(" --> ")
+                            results_hard_normal[k] = int(v)
+                    pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+                    for i in range(rows):
+                        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
+                    mesto = 1
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 300,0 ,1, rows * side - 30))
+
+                    text = "Легкий"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (40,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
+                    
+
+                    text = "Средний"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (180,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 100,570 ,1, side))
+
+                    text = "Сложный"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (335,19 * side)) 
+
+                    text = "№"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (13,5)) 
+
+                    text = "Имя"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (160,5)) 
+
+                    text = "Время"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (370,5)) 
+
+                    for name, seconds in results_hard_normal.items():
+                        text = f"{mesto}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+                        text = f"{name}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (160,mesto * side)) 
+
+
+                        text = f"{seconds // 60}m {seconds % 60}c"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (370,mesto * side)) 
+                        mesto += 1   
+
+                if 0 <= x_menu <= 300 and 570 <= y <= 598 and complexity == "hard":
+                    print("EASY")
+                    results_easy_hard = {}
+                    with open("results_easy.txt", "r", encoding= "UTF-8") as f:
+                        strings_easy = f.readlines()
+                        for string in strings_easy:
+                            k,v = string.strip().split(" --> ")
+                            results_easy_hard[k] = int(v)
+
+                    pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+                    for i in range(rows):
+                        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
+                    
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 800,0 ,1, rows * side - 30))
+                    mesto = 1
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 800,0 ,1, rows * side - 30))
+
+                    text = "Легкий"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (100,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
+
+                    text = "Средний"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (450,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 650,570 ,1, side))
+
+                    text = "Сложный"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (825,19 * side)) 
+
+                    text = "№"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (13,5)) 
+
+                    text = "Имя"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (400,5)) 
+
+                    text = "Время"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (920,5)) 
+
+                    for name, seconds in results_easy_hard.items():
+                        text = f"{mesto}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+                        text = f"{name}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (400,mesto * side)) 
+
+
+                        text = f"{seconds // 60}m {seconds % 60}c"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (920,mesto * side)) 
+                        mesto += 1
+
+
+
+
+
+                if 301 <= x_menu <= 680 and 570 <= y <= 598 and complexity == "hard":
+                    print("NORMAL")
+                    results_normal_hard = {}
+                    with open("results_normal.txt", "r", encoding= "UTF-8") as f:
+                        strings_easy = f.readlines()
+                        for string in strings_easy:
+                            k,v = string.strip().split(" --> ")
+                            results_normal_hard[k] = int(v)
+                    pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+                    for i in range(rows):
+                        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
+                    
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 800,0 ,1, rows * side - 30))
+                    mesto = 1
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 800,0 ,1, rows * side - 30))
+
+                    text = "Легкий"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (100,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
+
+                    text = "Средний"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (450,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 650,570 ,1, side))
+
+                    text = "Сложный"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (825,19 * side)) 
+
+                    text = "№"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (13,5)) 
+
+                    text = "Имя"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (400,5)) 
+
+                    text = "Время"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (920,5)) 
+
+                    for name, seconds in results_normal_hard.items():
+                        text = f"{mesto}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+                        text = f"{name}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (400,mesto * side)) 
+
+
+                        text = f"{seconds // 60}m {seconds % 60}c"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (920,mesto * side)) 
+                        mesto += 1
+
+
+
+                if 681 <= x_menu <= 1050 and 570 <= y <= 598 and complexity == "hard":
+                    print("HARD")
+                    results_hard_hard = {}
+                    with open("results_hard.txt", "r", encoding= "UTF-8") as f:
+                        strings_easy = f.readlines()
+                        for string in strings_easy:
+                            k,v = string.strip().split(" --> ")
+                            results_hard_hard[k] = int(v)
+                    pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
+                    for i in range(rows):
+                        pygame.draw.rect(screen, BLACK,(0,i * side - 1, cols * side,1))
+                    
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 800,0 ,1, rows * side - 30))
+                    mesto = 1
+                    pygame.draw.rect(screen, BLACK,(side + 5,0 ,1, rows * side - 30))
+                    pygame.draw.rect(screen, BLACK,(side + 800,0 ,1, rows * side - 30))
+
+                    text = "Легкий"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (100,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 270,570 ,1, side))
+
+                    text = "Средний"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (450,19 * side)) 
+                    pygame.draw.rect(screen, BLACK,(side + 650,570 ,1, side))
+
+                    text = "Сложный"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (825,19 * side)) 
+
+                    text = "№"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (13,5)) 
+
+                    text = "Имя"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (400,5)) 
+
+                    text = "Время"
+                    rendered_text = font.render(text, True, BLACK)
+                    screen.blit(rendered_text, (920,5)) 
+
+                    for name, seconds in results_hard_hard.items():
+                        text = f"{mesto}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (15,mesto * side)) 
+
+
+                        text = f"{name}"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (400,mesto * side)) 
+
+
+                        text = f"{seconds // 60}m {seconds % 60}c"
+                        rendered_text = font.render(text, True, BLACK)
+                        screen.blit(rendered_text, (920,mesto * side)) 
+                        mesto += 1
+
+
+            
+        
         if state == 'game on':
             if events[i].type == pygame.MOUSEBUTTONDOWN:
                 x, y = events[i].pos
@@ -422,40 +1119,40 @@ while True:
                                 if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
                                     kol_flags += 1
 
-                                    kolonka = x // side + 1
-                                    strochka= y // side + 1
-                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
-                                        kol_flags += 1
+                                kolonka = x // side + 1
+                                strochka= y // side + 1
+                                if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                    kol_flags += 1
 
-                                    kolonka = x // side + 1
-                                    strochka= y // side - 1
-                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
-                                        kol_flags += 1
+                                kolonka = x // side + 1
+                                strochka= y // side - 1
+                                if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                    kol_flags += 1
 
-                                    kolonka = x // side - 1
-                                    strochka= y // side + 1
-                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
-                                        kol_flags += 1
+                                kolonka = x // side - 1
+                                strochka= y // side + 1
+                                if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                    kol_flags += 1
 
-                                    kolonka = x // side
-                                    strochka= y // side - 1
-                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
-                                        kol_flags += 1
+                                kolonka = x // side
+                                strochka= y // side - 1
+                                if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                    kol_flags += 1
 
-                                    kolonka = x // side - 1
-                                    strochka= y // side
-                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
-                                        kol_flags += 1
+                                kolonka = x // side - 1
+                                strochka= y // side
+                                if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                    kol_flags += 1
 
-                                    kolonka = x // side + 1
-                                    strochka= y // side
-                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
-                                        kol_flags += 1
+                                kolonka = x // side + 1
+                                strochka= y // side
+                                if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                    kol_flags += 1
 
-                                    kolonka = x // side + 1
-                                    strochka= y // side
-                                    if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
-                                        kol_flags += 1
+                                kolonka = x // side + 1
+                                strochka= y // side
+                                if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
+                                    kol_flags += 1
                                                                 
 
 
@@ -535,7 +1232,7 @@ while True:
                     print("hard")
                     complexity = "hard"
                     bombs = 130
-                    rows = 25
+                    rows = 20
                     cols = 35
                     screen = pygame.display.set_mode((cols * side, rows * side + 50))
                     field, click_field, state, last, start, winner = start_game()    
@@ -556,30 +1253,74 @@ while True:
         print_win = font2.render('YOU WIN!',True,YELLOW)
         screen.blit(print_win, (cols * side // 2 - 75, rows * side + 5))
         pygame.display.update()
-        # name = input("Введите свое имя: ")
-        
-        m = open("results.txt", "r", encoding="UTF-8")
         met = True
         results = []
-        for stroka in m.readlines():
-            name2,res2 = stroka.split(" --> ")
-            res2 = int(res2)
-            if player_name == name2:
-                met = False
-                if res2 > p:
-                    res2 = p
-            results.append((res2, name2))
-        if met:
-            results.append((p,player_name))
-        results.sort()
-        m.close()
-        m = open("results.txt", "w", encoding="UTF-8")
-        print(results)
-        for place in results:
-            player_name = place[1]
-            p = place[0]
-            m.write(f"{player_name} --> {p}\n")
-        m.close()
+        if complexity == "easy":
+            m = open("results_easy.txt", "r", encoding="UTF-8")
+            for stroka in m.readlines():
+                name2,res2 = stroka.split(" --> ")
+                res2 = int(res2)
+                if player_name == name2:
+                    met = False
+                    if res2 > p:
+                        res2 = p
+                results.append((res2, name2))
+            if met:
+                results.append((p,player_name))
+            results.sort()
+            m.close()
+        elif complexity == "normal":
+            m = open("results_normal.txt", "r", encoding="UTF-8")
+            for stroka in m.readlines():
+                name2,res2 = stroka.split(" --> ")
+                res2 = int(res2)
+                if player_name == name2:
+                    met = False
+                    if res2 > p:
+                        res2 = p
+                results.append((res2, name2))
+            if met:
+                results.append((p,player_name))
+            results.sort()
+            m.close()
+        elif complexity == "hard":
+            m = open("results_hard.txt", "r", encoding="UTF-8")
+            for stroka in m.readlines():
+                name2,res2 = stroka.split(" --> ")
+                res2 = int(res2)
+                if player_name == name2:
+                    met = False
+                    if res2 > p:
+                        res2 = p
+                results.append((res2, name2))
+            if met:
+                results.append((p,player_name))
+            results.sort()
+            m.close()
+        
+        if complexity == "easy":
+            m = open("results_easy.txt", "w", encoding="UTF-8")
+            for place in results:
+                player_name = place[1]
+                p = place[0]
+                m.write(f"{player_name} --> {p}\n")
+            m.close()
+        elif complexity == "normal":
+            m = open("results_normal.txt", "w", encoding="UTF-8")
+            for place in results:
+                player_name = place[1]
+                p = place[0]
+                m.write(f"{player_name} --> {p}\n")
+            m.close()
+        elif complexity == "hard":
+            m = open("results_hard.txt", "w", encoding="UTF-8")
+            for place in results:
+                player_name = place[1]
+                p = place[0]
+                m.write(f"{player_name} --> {p}\n")
+            m.close()
+
+        
         
     if (state == 'game on' or state == 'stats' and last_state == "game on") and time.time() - last >= 0.1 and time_on:
         pygame.draw.rect(screen, BLACK,(cols * side - 35, rows * side + 5, 50, 20))
