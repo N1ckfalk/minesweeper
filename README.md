@@ -1,1 +1,6 @@
-git rm --cached results.txt
+# Игра Сапёр
+
+Проект по разработке игры **сапёр**.
+
+1. Для запуска нужно установить [Python](https://www.python.org/downloads/)
+2. После нужно запустить файл `minesweeper.py`
