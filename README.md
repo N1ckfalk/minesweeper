@@ -1,11 +1,12 @@
+
 Minesweeper
 =
 This is the my first game in my life<br>
-I wrote this game in python, that's why you need to install python<br>
+I wrote this game in python, that's why you need to install [Python](https://www.python.org/downloads/)<br>
 
 First step
 -
-> Install latest python version (
+> Install latest [Python](https://www.python.org/downloads/) version (
 Current version - 3.10.4)
 
 Whell, once you have downloaded python<br> 

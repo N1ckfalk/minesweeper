@@ -3,20 +3,20 @@ import time
 import random 
 from glob import glob 
 
-# file_name = "results_eazy.txt"
-# if not glob(file_name):
-#     with open(file_name,"w") as f:
-#         pass
+file_name = "results_easy.txt"
+if not glob(file_name):
+    with open(file_name,"w") as f:
+        pass
 
-# file_name = "results_normal.txt"
-# if not glob(file_name):
-#     with open(file_name,"w") as f:
-#         pass
+file_name = "results_normal.txt"
+if not glob(file_name):
+    with open(file_name,"w") as f:
+        pass
 
-# file_name = "results_hard.txt"
-# if not glob(file_name):
-#     with open(file_name,"w") as f:
-#         pass
+file_name = "results_hard.txt"
+if not glob(file_name):
+    with open(file_name,"w") as f:
+        pass
 
 pygame.font.init()
 
@@ -1160,8 +1160,8 @@ while True:
                                 if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
                                     kol_flags += 1
 
-                                kolonka = x // side + 1
-                                strochka= y // side
+                                kolonka = x // side
+                                strochka= y // side + 1
                                 if 0 <= kolonka  < cols and 0 <= strochka < rows and click_field[strochka][kolonka] == '-':
                                     kol_flags += 1
                                                                 
@@ -1308,23 +1308,23 @@ while True:
         if complexity == "easy":
             m = open("results_easy.txt", "w", encoding="UTF-8")
             for place in results:
-                player_name = place[1]
+                show_player_name = place[1]
                 p = place[0]
-                m.write(f"{player_name} --> {p}\n")
+                m.write(f"{show_player_name} --> {p}\n")
             m.close()
         elif complexity == "normal":
             m = open("results_normal.txt", "w", encoding="UTF-8")
             for place in results:
-                player_name = place[1]
+                show_player_name = place[1]
                 p = place[0]
-                m.write(f"{player_name} --> {p}\n")
+                m.write(f"{show_player_name} --> {p}\n")
             m.close()
         elif complexity == "hard":
             m = open("results_hard.txt", "w", encoding="UTF-8")
             for place in results:
-                player_name = place[1]
+                show_player_name = place[1]
                 p = place[0]
-                m.write(f"{player_name} --> {p}\n")
+                m.write(f"{show_player_name} --> {p}\n")
             m.close()
 
         

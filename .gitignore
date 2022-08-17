@@ -1,4 +1,2 @@
-results_easy.txt
-results_normal.txt
-results_hard.txt
 __pycache__
+results*.txt
