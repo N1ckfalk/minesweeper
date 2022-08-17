@@ -103,16 +103,15 @@ bombs = 30
 GRAY = (127, 127,127)
 screen = pygame.display.set_mode((cols * side, rows * side + 50))
 time_on = False
-
+pygame.display.set_icon(pygame.image.load("simvol_saper.png"))
+pygame.display.set_caption('Сапер')
 
 def start_game():
     winner = cols * rows
     field = gen_field(rows, cols, bombs)
     click_field = create_field(rows,cols)
     state = 'game on'
-
     pygame.draw.rect(screen, WHITE,(0,0 ,cols * side, rows * side))
-
     for i in range(cols):
         pygame.draw.rect(screen, BLACK,(i * side - 1,0 ,2, rows * side))
     for i in range(rows):
@@ -551,7 +550,6 @@ while True:
             if events[i].type == pygame.MOUSEBUTTONDOWN and events[i].button == 1:
                 x_menu, y_menu = events[i].pos
                 if 0 <= x_menu <= 90 and 418 <= y <= 448 and complexity == "easy":
-                    print("EASY")
                     results_easy_easy = {}
                     with open("results_easy.txt", "r", encoding= "UTF-8") as f:
                         strings_easy = f.readlines()
@@ -616,7 +614,6 @@ while True:
 
 
                 if 91 <= x_menu <= 200 and 418 <= y <= 448 and complexity == "easy":
-                    print("NORMAL")
                     results_normal_easy = {}
                     with open("results_normal.txt", "r", encoding= "UTF-8") as f:
                         strings_easy = f.readlines()
@@ -676,7 +673,6 @@ while True:
    
 
                 if 201 <= x_menu <= 300 and 418 <= y <= 448 and complexity == "easy":
-                    print("HARD")
                     results_hard_easy = {}
                     with open("results_hard.txt", "r", encoding= "UTF-8") as f:
                         strings_easy = f.readlines()
@@ -738,7 +734,6 @@ while True:
 
 
                 if 0 <= x_menu <= 130 and 570 <= y <= 600 and complexity == "normal":
-                    print("EASY")
                     results_easy_normal = {}
                     with open("results_easy.txt", "r", encoding= "UTF-8") as f:
                         strings_easy = f.readlines()
@@ -798,7 +793,6 @@ while True:
 
 
                 if 131 <= x_menu <= 300 and 570 <= y <= 600 and complexity == "normal":
-                    print("NORMAL")
                     results_normal_normal = {}
                     with open("results_normal.txt", "r", encoding= "UTF-8") as f:
                         strings_easy = f.readlines()
@@ -859,7 +853,6 @@ while True:
 
 
                 if 301 <= x_menu <= 450 and 570 <= y <= 600 and complexity == "normal":
-                    print("HARD")
                     results_hard_normal = {}
                     with open("results_hard.txt", "r", encoding= "UTF-8") as f:
                         strings_easy = f.readlines()
@@ -918,7 +911,6 @@ while True:
                         mesto += 1   
 
                 if 0 <= x_menu <= 300 and 570 <= y <= 598 and complexity == "hard":
-                    print("EASY")
                     results_easy_hard = {}
                     with open("results_easy.txt", "r", encoding= "UTF-8") as f:
                         strings_easy = f.readlines()
@@ -984,7 +976,6 @@ while True:
 
 
                 if 301 <= x_menu <= 680 and 570 <= y <= 598 and complexity == "hard":
-                    print("NORMAL")
                     results_normal_hard = {}
                     with open("results_normal.txt", "r", encoding= "UTF-8") as f:
                         strings_easy = f.readlines()
@@ -1047,7 +1038,6 @@ while True:
 
 
                 if 681 <= x_menu <= 1050 and 570 <= y <= 598 and complexity == "hard":
-                    print("HARD")
                     results_hard_hard = {}
                     with open("results_hard.txt", "r", encoding= "UTF-8") as f:
                         strings_easy = f.readlines()
@@ -1132,7 +1122,6 @@ while True:
                     if events_met or events[i].button == 2:
                         if click_field[y // side][x // side] == '/':
                             kol_bombs = field[y // side][x // side]
-                            print(kol_bombs)
                             if kol_bombs != 0 and kol_bombs != 8:
                                 kol_flags = 0
 
@@ -1235,7 +1224,6 @@ while True:
                 x, y = events[i].pos
 
                 if 100 <= x <= 200 and 300 <= y <= 400:
-                    print("easy")
                     complexity = "easy"
                     bombs = 10
                     rows = 15
@@ -1243,7 +1231,6 @@ while True:
                     screen = pygame.display.set_mode((cols * side, rows * side + 50))
                     field, click_field, state, last, start, winner = start_game()
                 if 240 <= x <= 340 and 300 <= y <= 400:
-                    print("normal")
                     complexity = "normal"
                     bombs = 40
                     rows = 20
@@ -1251,7 +1238,6 @@ while True:
                     screen = pygame.display.set_mode((cols * side, rows * side + 50))
                     field, click_field, state, last, start, winner = start_game()
                 if 380 <= x <= 480 and 300 <= y <= 400:
-                    print("hard")
                     complexity = "hard"
                     bombs = 130
                     rows = 20
@@ -1269,7 +1255,6 @@ while True:
     
     if state == "game on" and winner == bombs:
         p =int(time.time() - start)
-        print('WIN!')
         state = 'game off'
         font2 = pygame.font.SysFont('Times New Roman', 28)
         print_win = font2.render('YOU WIN!',True,YELLOW)
